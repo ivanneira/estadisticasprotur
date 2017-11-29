@@ -5,12 +5,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-//rutas
+//rutas de vistas
 var index = require('./routes/index');
-//var users = require('./routes/users');
-//--------------------------rutas de usuario
-//ejecuta store procedure de origenes
-//var getOrigenes = require('./routes/getOrigenes');
+
 
 //rutas de datos
 var getdata = require('./routes/getData');
@@ -47,11 +44,9 @@ app.use(express.static(__dirname + '/node_modules/select2/dist'));
 
 //rutas de vistas
 app.use('/', index);
-//app.use('/users', users);
 app.use('/estadisticas', estadisticas);
 
 //rutas de datos
-//app.use('/getorigenes', getOrigenes);
 app.use('/getdata', getdata);
 app.use('/getcs', getcs);
 
