@@ -5,8 +5,20 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+//rutas
 var index = require('./routes/index');
-var users = require('./routes/users');
+//var users = require('./routes/users');
+//--------------------------rutas de usuario
+//ejecuta store procedure de origenes
+//var getOrigenes = require('./routes/getOrigenes');
+
+//rutas de datos
+var getdata = require('./routes/getData');
+var getcs = require('./routes/getCS');
+
+//rutas de vistas
+var estadisticas = require('./routes/estadisticas')
+
 
 var app = express();
 
@@ -28,9 +40,20 @@ app.use(express.static(__dirname + '/node_modules/bootstrap/dist'));
 app.use(express.static(__dirname + '/node_modules/jquery/dist'));
 //highcharts directory
 app.use(express.static(__dirname + '/node_modules/highcharts'));
+//bootstrap-datepicker directory
+app.use(express.static(__dirname + '/node_modules/bootstrap-datepicker/dist'));
+//select2 directory
+app.use(express.static(__dirname + '/node_modules/select2/dist'));
 
+//rutas de vistas
 app.use('/', index);
-app.use('/users', users);
+//app.use('/users', users);
+app.use('/estadisticas', estadisticas);
+
+//rutas de datos
+//app.use('/getorigenes', getOrigenes);
+app.use('/getdata', getdata);
+app.use('/getcs', getcs);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

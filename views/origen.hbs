@@ -1,0 +1,184 @@
+
+<div class="form-group">
+    <br />
+    <h4>Elija centro de salud:</h4>
+    <select id="ddCS" name="state">
+    </select>
+
+    <br>
+    <h4>Elija rango de fechas:</h4>
+
+    <div id="datepicker-container">
+        <div class="input-daterange input-group" id="datepicker">
+            <span class="input-group-addon">Fecha desde:</span>
+            <input id="dateDesde" type="text" class="input-sm form-control" name="start" />
+            <span class="input-group-addon">Fecha hasta:</span>
+            <input id="dateHasta" type="text" class="input-sm form-control" name="end" /> 
+        </div>
+    </div>
+
+    <br />
+
+    <button class="btn btn-primary" id="mostrarOrigenes">Mostrar Gráfico</button>
+
+</div> 
+
+<div id="origenesContainer"></div>
+
+<table id="origenesTable" class="table table-striped" hidden="hidden">
+    <thead>
+      <tr>
+        <th>Centro de salud</th>
+        <th>Cantidad de derivaciones</th>
+      </tr>
+    </thead>
+    <tbody id="origenesBody"></tbody>
+</table>
+
+
+
+
+<script>
+
+    var origenesChart;
+
+    $(function () { 
+
+        //inicia datepicker
+        $('#datepicker-container input').datepicker({
+            format: "yyyy-mm-dd",
+            language: "es",
+            orientation: "bottom auto",
+            autoclose: true,
+            todayHighlight: true
+        });
+
+        $('#ddCS').select2();
+
+        //llena con centros de salud el dropdown
+        $.ajax({
+            type: "GET",
+            //async: true,
+            url: '/getcs',
+            success: function(data)
+            {
+
+                filldd(data);
+
+            },
+            error: function(e)
+            {
+                event.stopPropagation();
+                alert("error al acceder al servidor, recargue la página e intente nuevamente");
+                console.dir(e);
+            }
+        });
+
+
+        $("#mostrarOrigenes").click(function(){
+
+            var cs = $("#ddCS").val();
+            var fd = $('#dateDesde').val();
+            var fh = $('#dateHasta').val();
+
+            console.log(cs)
+            console.log(fd)
+            console.log(fh)
+
+            if(cs == '' || fd == '' || fh ==''){
+
+                alert('Ingrese todos los valores')
+            }else{
+                fillGraph( cs, fd, fh);
+            }
+
+            
+        });
+
+    });
+
+
+    function fillGraph(cs,fd,fh){
+        
+
+        $.ajax({
+            type: "GET",
+            //async: true,
+            url: '/getdata/origenes/'+ cs +'/'+ fd +'/'+ fh,
+            success: function(data)
+            {
+                //--------------------------------------llenado de gráfico
+                var cantidades=[];
+
+                var datos = data[0];
+
+
+
+                for(var index in datos){
+                    
+                    cantidades.push({
+                        name: datos[index].NOMBRE,
+                        y: datos[index].Cantidad
+                    });
+                        
+                    //------------------------------lleno tabla
+
+                    $("#origenesBody").append('<tr><td>' + datos[index].NOMBRE + '</td><td>' + datos[index].Cantidad + '</td></tr>');
+
+                }
+
+                origenesChart = Highcharts.chart('origenesContainer', {
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        type: 'pie'
+                    },
+                    title: {
+                        text: 'El centro de salud ' + $("#ddCS").find("option:selected").text() + ' recibe turnos de los siguientes centros de salud: '
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                style: {
+                                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                }
+                            }
+                        }
+                    },
+                    series: [{
+                        text: 'Derivaciones',
+                        data: cantidades
+                    }]
+                });
+
+                $("#origenesTable").show();
+
+            },
+            error: function(e)
+            {
+                event.stopPropagation();
+                alert("error al acceder al servidor, recargue la página e intente nuevamente");
+                console.dir(e);
+            }
+        });
+
+    }
+
+    function filldd(data){
+
+        $.each(data, function(key, value) {   
+            $('#ddCS')
+                .append(
+                    $("<option></option>")
+                            .attr("value",value.id)
+                            .text(value.Nombre)
+                        ); 
+        });
+    }
+
+</script>
