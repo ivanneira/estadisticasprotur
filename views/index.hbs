@@ -2,95 +2,291 @@
 
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus suscipit nam, nisi officia esse velit consectetur cupiditate inventore expedita a ipsum fugit culpa quo quasi enim iusto et rem nihil.
-        </p>
+        <p>Lo mejor de todo es que HOY ES VIERNES!!</p>
         
     </div>
 
 </div>
 
 
-<div class="row">
+<div class="row tarjeta">
 
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Totales de registros:</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Fecha del primer registro:</td>
+                    <td id="desde"></td>
+                </tr>
+                <tr>
+                    <td>Fecha del último registro:</td>
+                    <td id="hasta"></td>
+                </tr>
+                <tr>
+                    <td>Registros ingresados:</td>
+                    <td id="totalderegistros"></td>
+                </tr>
+            </tbody>
+        </table>
 
-
-<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-    <table id="totalesTable" class="table table-striped">
-        <thead>
-        <tr>
-            <th>Totales</th>
-        </tr>
-        </thead>
-        <tbody id="totalesBody">
-            <tr>
-                <td>Fecha del primer registro:</td>
-                <td id="desde"></td>
-            </tr>
-            <tr>
-                <td>Fecha del último registro:</td>
-                <td id="hasta"></td>
-            </tr>
-            <tr>
-                <td>Registros ingresados:</td>
-                <td id="totalderegistros"></td>
-            </tr>
-            <tr>
-                <td>Personas que cargan:</td>
-                <td id="totaldeprotur"></td> 
-            </tr>
-            <tr>
-                <td>Centros de salud que cargan:</td>
-                <td id="totaldecs"></td> 
-            </tr>
-
-        </tbody>
-    </table>
-    
-</div>
-        
     </div>
+</div>
 
+<div class="row tarjeta">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Totales de personas:</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Personas que cargan:</td>
+                    <td id="totaldeprotur"></td> 
+                </tr>
+               
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div class="row tarjeta">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+        <table class="table table-striped">
+
+            <tbody>
+                <thead>
+                    <tr>
+                        <th>Totales de tipos de turno:</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tr>
+                    <td>Turnos derivados:</td>
+                    <td id="derivados"></td> 
+                </tr>
+                <tr>
+                    <td>Interconsultas:</td>
+                    <td id="interconsultas"></td> 
+                </tr>
+                <tr>
+                    <td>Demandas espontáneas:</td>
+                    <td id="espontaneas"></td> 
+                </tr>
+                <tr>
+                    <td>Pacientes en tránsito:</td>
+                    <td id="transitos"></td> 
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row tarjeta">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+        <table class="table table-striped">
+            <tbody>
+                <thead>
+                    <tr>
+                        <th>Totales de estados de turno:</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tr>
+                    <td>Turnos atendidos:</td>
+                    <td id="atendidos"></td> 
+                </tr>
+                <tr>
+                    <td>Turnos programados:</td>
+                    <td id="programados"></td> 
+                </tr>
+                <tr>
+                    <td>Turnos sin resolver:</td>
+                    <td id="noresueltos"></td> 
+                </tr>
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+
+
+<!--Gráficos-->
+<div class="row tarjeta">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+        <div id="tiposChart"></div>
+
+    </div>
+</div>
+
+<div class="row tarjeta">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+        <div id="estadosChart"></div>
+
+    </div>
 </div>
 
 
 <script>
 
 
-    $(function(){
+$(function(){
 
-        
-         $.ajax({
-            type: "GET",
-            //async: true,
-            url: '/gettotales',
-            success: function(data)
-            {
-                
-                $("#totalderegistros").text(data.totalderegistros.registros);
-                $("#totaldeprotur").text(data.totalderegistros.protur);
-                $("#totaldecs").text(data.totalderegistros.cs);
-                $("#desde").text(data.totalderegistros.desde);
-                $("#hasta").text(data.totalderegistros.hasta);
-                
-                //console.dir(data)
+    
+        $.ajax({
+        type: "GET",
+        //async: true,
+        url: '/gettotales',
+        success: function(data)
+        {
+            
+            $("#totalderegistros").text(data.totalderegistros.registros);
+            $("#totaldeprotur").text(data.totalderegistros.protur);
+            $("#totaldecs").text(data.totalderegistros.cs);
+            $("#desde").text(data.totalderegistros.desde);
+            $("#hasta").text(data.totalderegistros.hasta);
 
-            },
-            error: function(e)
-            {
-                event.stopPropagation();
-                alert("error al acceder al servidor, recargue la página e intente nuevamente");
-                console.dir(e);
-            }
-        });
+            $("#hasta").text(data.totalderegistros.hasta);
+            $("#hasta").text(data.totalderegistros.hasta);
 
-        
+            $("#derivados").text(data.totalderegistros.derivados);
+            $("#interconsultas").text(data.totalderegistros.interconsultas);
+            $("#espontaneas").text(data.totalderegistros.espontaneas);
+            $("#transitos").text(data.totalderegistros.transitos);
 
+            $("#programados").text(data.totalderegistros.programados);
+            $("#noresueltos").text(data.totalderegistros.noresueltos);
+            $("#atendidos").text(data.totalderegistros.atendidos);
+            
+            //console.dir(data)
 
+            fillCharts(data);
+
+        },
+        error: function(e)
+        {
+            event.stopPropagation();
+            alert("error al acceder al servidor, recargue la página e intente nuevamente");
+            console.dir(e);
+        }
     });
 
+    
+
+
+});
+
+function fillCharts(data){
+
+    //console.dir(data)
+
+    var tiposChart = Highcharts.chart('tiposChart', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
+        title: {
+            text: 'Tipos de turno'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
+        },
+        series: [{
+            text: 'Tipos',
+            data: [
+                {
+                    'name': 'Derivados',
+                    'y': data.totalderegistros.derivados
+                },
+                {
+                    'name': 'Interconsultas',
+                    'y': data.totalderegistros.interconsultas
+                },
+                {
+                    'name': 'Demanda expontánea',
+                    'y': data.totalderegistros.espontaneas
+                },
+                {
+                    'name': 'Paciente en tránsito',
+                    'y': data.totalderegistros.transitos
+                }]
+
+        }]
+    });
+
+
+
+        var estadosChart = Highcharts.chart('estadosChart', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
+        title: {
+            text: 'Estados de turno'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
+        },
+        series: [{
+            text: 'Tipos',
+            data: [
+                {
+                    'name': 'Programados',
+                    'y': data.totalderegistros.programados
+                },
+                {
+                    'name': 'Sin Resolver',
+                    'y': data.totalderegistros.noresueltos
+                },
+                {
+                    'name': 'Atendidos',
+                    'y': data.totalderegistros.atendidos
+                }]
+
+        }]
+    });
+}
 
 
 </script>
