@@ -1,21 +1,98 @@
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus suscipit nam, nisi officia esse velit consectetur cupiditate inventore expedita a ipsum fugit culpa quo quasi enim iusto et rem nihil.
-</p>
+<div class="row">
 
-<br>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
-<button class="btn btn-primary" id="estadisticas">Ir a estadísticas</button>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus suscipit nam, nisi officia esse velit consectetur cupiditate inventore expedita a ipsum fugit culpa quo quasi enim iusto et rem nihil.
+        </p>
+        
+    </div>
+
+</div>
+
+
+<div class="row">
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+
+
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+    <table id="totalesTable" class="table table-striped">
+        <thead>
+        <tr>
+            <th>Totales</th>
+        </tr>
+        </thead>
+        <tbody id="totalesBody">
+            <tr>
+                <td>Fecha del primer registro:</td>
+                <td id="desde"></td>
+            </tr>
+            <tr>
+                <td>Fecha del último registro:</td>
+                <td id="hasta"></td>
+            </tr>
+            <tr>
+                <td>Registros ingresados:</td>
+                <td id="totalderegistros"></td>
+            </tr>
+            <tr>
+                <td>Personas que cargan:</td>
+                <td id="totaldeprotur"></td> 
+            </tr>
+            <tr>
+                <td>Centros de salud que cargan:</td>
+                <td id="totaldecs"></td> 
+            </tr>
+
+        </tbody>
+    </table>
+    
+</div>
+        
+    </div>
+
+</div>
+
 
 <script>
 
-$(function(){
+
+    $(function(){
+
+        
+         $.ajax({
+            type: "GET",
+            //async: true,
+            url: '/gettotales',
+            success: function(data)
+            {
+                
+                $("#totalderegistros").text(data.totalderegistros.registros);
+                $("#totaldeprotur").text(data.totalderegistros.protur);
+                $("#totaldecs").text(data.totalderegistros.cs);
+                $("#desde").text(data.totalderegistros.desde);
+                $("#hasta").text(data.totalderegistros.hasta);
+                
+                //console.dir(data)
+
+            },
+            error: function(e)
+            {
+                event.stopPropagation();
+                alert("error al acceder al servidor, recargue la página e intente nuevamente");
+                console.dir(e);
+            }
+        });
+
+        
 
 
-    $("#estadisticas").click(function(){
-
-        window.location("/estadisticas");
-    };)
+    });
 
 
-});
 
 </script>
+
+

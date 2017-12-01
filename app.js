@@ -12,6 +12,7 @@ var index = require('./routes/index');
 //rutas de datos
 var getdata = require('./routes/getData');
 var getcs = require('./routes/getCS');
+var gettotales = require('./routes/getTotales');
 
 //rutas de vistas
 var estadisticas = require('./routes/estadisticas')
@@ -49,6 +50,7 @@ app.use('/estadisticas', estadisticas);
 //rutas de datos
 app.use('/getdata', getdata);
 app.use('/getcs', getcs);
+app.use('/gettotales', gettotales);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

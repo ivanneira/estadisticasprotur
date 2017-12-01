@@ -1,48 +1,84 @@
-
-<div class="form-group">
-    <br />
+<div class="row">
     <h4>Elija centro de salud:</h4>
     <select id="ddCS" name="state">
     </select>
+</div>
 
-    <br>
-    <h4>Elija rango de fechas:</h4>
+<div class="row">
 
-    <div id="datepicker-container">
-        <div class="input-daterange input-group" id="datepicker">
-            <span class="input-group-addon">Fecha desde:</span>
-            <input id="dateDesde" type="text" class="input-sm form-control" name="start" />
-            <span class="input-group-addon">Fecha hasta:</span>
-            <input id="dateHasta" type="text" class="input-sm form-control" name="end" /> 
-        </div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
     </div>
 
-    <br />
-
-    <button class="btn btn-primary" id="mostrarOrigenes">Mostrar Gráfico</button>
-
-</div> 
-
-<div id="origenesContainer"></div>
-
-<table id="origenesTable" class="table table-striped" hidden="hidden">
-    <thead>
-      <tr>
-        <th>Centro de salud</th>
-        <th>Cantidad de derivaciones</th>
-      </tr>
-    </thead>
-    <tbody id="origenesBody"></tbody>
-</table>
+    <div class="form-group">
 
 
+        <h4>Elija rango de fechas:</h4>
 
+        <div id="datepicker-container">
+            <div class="input-daterange input-group" id="datepicker">
+                <span class="input-group-addon">Fecha desde:</span>
+                <input id="dateDesde" type="text" class="input-sm form-control" name="start" />
+                <span class="input-group-addon">Fecha hasta:</span>
+                <input id="dateHasta" type="text" class="input-sm form-control" name="end" /> 
+            </div>
+        </div>
+
+    </div> 
+
+</div>
+
+<div class="row">
+
+    <button class="btn btn-primary" id="mostrarEstadisticas">Mostrar estadísticas</button>
+
+
+</div>
+
+<div class="row">
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+        <div id="origenesContainer"></div>
+
+    </div>
+
+</div>
+
+<div class="row">
+    <table id="origenesTable" class="table table-striped" hidden="hidden">
+        <thead>
+        <tr>
+            <th>Centro de salud</th>
+            <th>Cantidad de derivaciones</th>
+        </tr>
+        </thead>
+        <tbody id="origenesBody"></tbody>
+    </table>
+</div>
+
+
+<div class="row">
+
+    <table id="tiposdeTurnoTable" class="table table-striped" hidden="hidden">
+        <thead>
+        <tr>
+            <th>Tipos de turno</th>
+            <th>Cantidad de turnos</th>
+        </tr>
+        </thead>
+        <tbody id="tiposdeTurnoBody"></tbody>
+    </table>
+
+</div>
 
 <script>
 
     var origenesChart;
 
     $(function () { 
+
+        $("#waiting").modal('show');
 
         //inicia datepicker
         $('#datepicker-container input').datepicker({
@@ -64,6 +100,7 @@
             {
 
                 filldd(data);
+                $("#waiting").modal('hide');
 
             },
             error: function(e)
@@ -75,20 +112,21 @@
         });
 
 
-        $("#mostrarOrigenes").click(function(){
+        $("#mostrarEstadisticas").click(function(){
 
             var cs = $("#ddCS").val();
             var fd = $('#dateDesde').val();
             var fh = $('#dateHasta').val();
 
-            console.log(cs)
+            {{!-- console.log(cs)
             console.log(fd)
-            console.log(fh)
+            console.log(fh) --}}
 
             if(cs == '' || fd == '' || fh ==''){
 
                 alert('Ingrese todos los valores')
             }else{
+                fillTurnos(cs,fd,fh);
                 fillGraph( cs, fd, fh);
             }
 
@@ -96,6 +134,23 @@
         });
 
     });
+
+    function fillTurnos(cs,fd,fh){
+
+        $.ajax({
+            type: "GET",
+            url: '/getdata/tipodeturnos/'+ cs +'/'+ fd +'/'+ fh,
+            success: function(data){
+
+
+            },
+             error: function(e){
+                event.stopPropagation();
+                alert("error al acceder al servidor, recargue la página e intente nuevamente");
+                console.dir(e);
+             }
+        });
+    }
 
 
     function fillGraph(cs,fd,fh){
