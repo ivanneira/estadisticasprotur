@@ -4,18 +4,18 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var async = require('async');
 
 //rutas de vistas
 var index = require('./routes/index');
-
+var estadisticas = require('./routes/estadisticas');
+var seguimiento = require('./routes/seguimiento');
 
 //rutas de datos
 var getdata = require('./routes/getData');
 var getcs = require('./routes/getCS');
 var gettotales = require('./routes/getTotales');
-
-//rutas de vistas
-var estadisticas = require('./routes/estadisticas')
+var getseguimiento = require('./routes/getSeguimiento');
 
 
 var app = express();
@@ -42,15 +42,19 @@ app.use(express.static(__dirname + '/node_modules/highcharts'));
 app.use(express.static(__dirname + '/node_modules/bootstrap-datepicker/dist'));
 //select2 directory
 app.use(express.static(__dirname + '/node_modules/select2/dist'));
+//async
+app.use(express.static(__dirname + '/node_modules/async/dist'));
 
 //rutas de vistas
 app.use('/', index);
 app.use('/estadisticas', estadisticas);
+app.use('/seguimiento', seguimiento);
 
 //rutas de datos
 app.use('/getdata', getdata);
 app.use('/getcs', getcs);
 app.use('/gettotales', gettotales);
+app.use('/getSeguimiento', getseguimiento);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -35,7 +35,99 @@
 
 </div>
 
-<div class="row">
+<div class="row tarjeta">
+    <table id="totalesTable" class="table table-striped" hidden="hidden">
+        <thead>
+        <tr>
+            <th class="title">Totales por Centro de salud (filtrado por fechas ingresadas)</th>
+            <th class="title"></th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Fecha del primer registro:</td>
+                <td id="desde"></td>
+            </tr>
+            <tr>
+                <td>Fecha del último registro:</td>
+                <td id="hasta"></td>
+            </tr>
+            <tr>
+                <td>Registros ingresados:</td>
+                <td id="totalderegistros"></td>
+            </tr>
+            <tr>
+                <td>Personas que cargan:</td>
+                <td id="totaldeprotur"></td> 
+            </tr>
+            <tr>
+                <td class="title"><b> Orígenes de los turnos:</b></td>
+                <td class="title"></td>
+            </tr>
+            <tr>
+                <td>Turnos derivados:</td>
+                <td id="derivados"></td> 
+            </tr>
+            <tr>
+                <td>Interconsultas:</td>
+                <td id="interconsultas"></td> 
+            </tr>
+            <tr>
+                <td>Demandas espontáneas:</td>
+                <td id="espontaneas"></td> 
+            </tr>
+            <tr>
+                <td>Pacientes en tránsito:</td>
+                <td id="transitos"></td> 
+            </tr>
+            <tr>
+                <td class="title"><b>Estados de turnos:</b></td>
+                <td class="title"></td>
+            </tr>
+            <tr>
+                <td>Turnos atendidos:</td>
+                <td id="atendidos"></td> 
+            </tr>
+            <tr>
+                <td>Turnos programados:</td>
+                <td id="programados"></td> 
+            </tr>
+            <tr>
+                <td>Turnos sin resolver:</td>
+                <td id="noresueltos"></td> 
+            </tr>
+
+        </tbody>
+    </table>
+</div>
+
+<h4 class="graphTitle">Origen de los turnos</h4>
+
+<div class="row tarjeta">
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+        <div id="tipoTurnoContainer"></div>
+
+    </div>
+
+</div>
+
+<h4 class="graphTitle">Estado de los turnos</h4>
+
+<div class="row tarjeta">
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+        <div id="estadosContainer"></div>
+
+    </div>
+
+</div>
+
+<h4 class="graphTitle">Origen de derivaciones</h4>
+
+<div class="row tarjeta">
 
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
@@ -45,7 +137,7 @@
 
 </div>
 
-<div class="row">
+<div class="row tarjeta">
     <table id="origenesTable" class="table table-striped" hidden="hidden">
         <thead>
         <tr>
@@ -57,26 +149,45 @@
     </table>
 </div>
 
+<h4 class="graphTitle">Especialidades que solicitan</h4>
 
-<div class="row">
 
-    <table id="tiposdeTurnoTable" class="table table-striped" hidden="hidden">
+<div class="row tarjeta">
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+        <div id="especialidadesContainer"></div>
+
+    </div>
+
+</div>
+
+<div class="row tarjeta">
+
+    <table id="especialidadesTable" class="table table-striped" hidden="hidden">
         <thead>
         <tr>
-            <th>Tipos de turno</th>
+            <th>Especialidad</th>
             <th>Cantidad de turnos</th>
         </tr>
         </thead>
-        <tbody id="tiposdeTurnoBody"></tbody>
+        <tbody id="especialidadesBody"></tbody>
     </table>
 
 </div>
+
+
+
 
 <script>
 
     var origenesChart;
 
     $(function () { 
+
+        $(".tarjeta").hide();
+        $(".graphTitle").hide();
+
 
         $("#waiting").modal('show');
 
@@ -98,7 +209,7 @@
             url: '/getcs',
             success: function(data)
             {
-
+                //llena dropdown con centros de salud desde la base de datos
                 filldd(data);
                 $("#waiting").modal('hide');
 
@@ -114,6 +225,10 @@
 
         $("#mostrarEstadisticas").click(function(){
 
+
+        $("#origenesBody").empty();
+        $("#especialidadesBody").empty();
+
             var cs = $("#ddCS").val();
             var fd = $('#dateDesde').val();
             var fh = $('#dateHasta').val();
@@ -126,8 +241,10 @@
 
                 alert('Ingrese todos los valores')
             }else{
-                fillTurnos(cs,fd,fh);
-                fillGraph( cs, fd, fh);
+                //esta es la primer llamada de ajax, los demás se van llamando consecutivamente en los success
+                fillTotales(cs,fd,fh);
+                //fillTurnos(cs,fd,fh);
+                //fillGraph( cs, fd, fh);
             }
 
             
@@ -135,13 +252,125 @@
 
     });
 
-    function fillTurnos(cs,fd,fh){
+    //llena la tabla con totales, es la primer llamada de ajax
+    function fillTotales(cs,fd,fh){
 
         $.ajax({
             type: "GET",
-            url: '/getdata/tipodeturnos/'+ cs +'/'+ fd +'/'+ fh,
+            url: '/getdata/totales/'+ cs +'/'+ fd +'/'+ fh,
             success: function(data){
+                   //console.dir(data)
+                   var resultados = data[0][0];
 
+                    $("#totalderegistros").text(resultados.registros);
+                    $("#totaldeprotur").text(resultados.protur);
+                    $("#totaldecs").text(resultados.cs);
+                    $("#desde").text(resultados.desde);
+                    $("#hasta").text(resultados.hasta);
+
+                    $("#hasta").text(resultados.hasta);
+                    $("#hasta").text(resultados.hasta);
+
+                    $("#derivados").text(resultados.derivados);
+                    $("#interconsultas").text(resultados.interconsultas);
+                    $("#espontaneas").text(resultados.espontaneas);
+                    $("#transitos").text(resultados.transitos);
+
+                    $("#programados").text(resultados.programados);
+                    $("#noresueltos").text(resultados.noresueltos);
+                    $("#atendidos").text(resultados.atendidos);
+
+                    $("#totalesTable").show();
+
+                    //chart de totales de orígenes de turno
+                    var origenesChart = Highcharts.chart('tipoTurnoContainer', {
+                        chart: {
+                            plotBackgroundColor: null,
+                            plotBorderWidth: null,
+                            plotShadow: false,
+                            type: 'pie'
+                        },
+                        title: {
+                            text: 'El centro de salud ' + $("#ddCS").find("option:selected").text() + ' recibe los siguientes tipos de turnos: '
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                    style: {
+                                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                    }
+                                }
+                            }
+                        },
+                        series: [{
+                            text: 'Derivaciones',
+                            data: [
+                                    {
+                                        'name': 'Derivados',
+                                        'y': resultados.derivados
+                                    },
+                                    {
+                                        'name': 'Interconsultas',
+                                        'y': resultados.interconsultas
+                                    },
+                                    {
+                                        'name': 'Demanda expontánea',
+                                        'y': resultados.espontaneas
+                                    },
+                                    {
+                                        'name': 'Paciente en tránsito',
+                                        'y': resultados.transitos
+                                    }]
+                        }]
+                    });
+
+                    var estadosChart = Highcharts.chart('estadosContainer', {
+                        chart: {
+                            plotBackgroundColor: null,
+                            plotBorderWidth: null,
+                            plotShadow: false,
+                            type: 'pie'
+                        },
+                        title: {
+                            text: 'El centro de salud ' + $("#ddCS").find("option:selected").text() + ' resuelve los turnos de la siguiente manera: '
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                    style: {
+                                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                    }
+                                }
+                            }
+                        },
+                        series: [{
+                            text: 'Derivaciones',
+                            data: [
+                                    {
+                                        'name': 'Atendidos',
+                                        'y': resultados.atendidos
+                                    },
+                                    {
+                                        'name': 'Programados',
+                                        'y': resultados.programados
+                                    },
+                                    {
+                                        'name': 'Sin resolver',
+                                        'y': resultados.noresueltos
+                                    }]
+                        }]
+                    });
+
+                    //llamada a la segunda funcion con ajax
+                    fillGraph( cs, fd, fh);
 
             },
              error: function(e){
@@ -150,9 +379,13 @@
                 console.dir(e);
              }
         });
+
+        
     }
 
 
+
+    //llena tabla de orígenes de turnos derivados de otros cs
     function fillGraph(cs,fd,fh){
         
 
@@ -162,12 +395,11 @@
             url: '/getdata/origenes/'+ cs +'/'+ fd +'/'+ fh,
             success: function(data)
             {
+
                 //--------------------------------------llenado de gráfico
                 var cantidades=[];
 
                 var datos = data[0];
-
-
 
                 for(var index in datos){
                     
@@ -180,9 +412,13 @@
 
                     $("#origenesBody").append('<tr><td>' + datos[index].NOMBRE + '</td><td>' + datos[index].Cantidad + '</td></tr>');
 
+
                 }
 
-                origenesChart = Highcharts.chart('origenesContainer', {
+
+                fillEsp(cs,fd,fh);
+
+                var origenesCSChart = Highcharts.chart('origenesContainer', {
                     chart: {
                         plotBackgroundColor: null,
                         plotBorderWidth: null,
@@ -224,6 +460,104 @@
 
     }
 
+    //ehh... los turnos, borrala
+    function fillTurnos(cs,fd,fh){
+
+        $.ajax({
+            type: "GET",
+            url: '/getdata/tipodeturnos/'+ cs +'/'+ fd +'/'+ fh,
+            success: function(data){
+                    console.dir(data)
+
+            },
+             error: function(e){
+                event.stopPropagation();
+                alert("error al acceder al servidor, recargue la página e intente nuevamente");
+                console.dir(e);
+             }
+        });
+    }
+
+    //llena las especialidades
+    function fillEsp(cs,fd,fh){
+
+        $("#waiting").modal('show');
+
+            $.ajax({
+                type: "GET",
+                //async: true,
+                url: '/getdata/especialidades/'+ cs +'/'+ fd +'/'+ fh,
+                success: function(data){
+
+                    //console.dir(data)
+
+
+                    var cantidades=[];
+
+                    var datos = data[0];
+
+
+
+                    for(var index in datos){
+                        
+                        cantidades.push({
+                            name: datos[index].NOMBRE,
+                            y: datos[index].Cantidad
+                        });
+                            
+                        //------------------------------lleno tabla
+
+                        $("#especialidadesBody")
+                            .append('<tr><td>' + datos[index].NOMBRE + '</td><td>' + datos[index].Cantidad + '</td></tr>');
+
+                    }
+
+                    var especialidadesChart = Highcharts.chart('especialidadesContainer', {
+                        chart: {
+                            plotBackgroundColor: null,
+                            plotBorderWidth: null,
+                            plotShadow: false,
+                            type: 'pie'
+                        },
+                        title: {
+                            text: 'En el centro de salud ' + $("#ddCS").find("option:selected").text() + ' se solicitan las siguientes especialidades: '
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                    style: {
+                                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                    }
+                                }
+                            }
+                        },
+                        series: [{
+                            text: 'Derivaciones',
+                            data: cantidades
+                        }]
+                    });
+                    
+                    $("#especialidadesTable").show();
+                    $(".tarjeta").show();
+                    $(".graphTitle").show();
+                    $("#waiting").modal('hide');
+                },
+                error: function(e){
+                    event.stopPropagation();
+                    alert("error al acceder al servidor, recargue la página e intente nuevamente");
+                    console.dir(e);
+                
+                }
+            });
+
+
+    }
+
+    //llena el dropdown con centros de salud
     function filldd(data){
 
         $.each(data, function(key, value) {   
