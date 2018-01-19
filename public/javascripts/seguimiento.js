@@ -52,7 +52,11 @@ function organizador(data){
                 callback();
             },
             function(callback){
-                fillTable(dataset); 
+                fillTable(totales); 
+                callback();
+            },
+            function(callback){
+                fillGraph(totales); 
                 callback();
             }
         ],
@@ -67,6 +71,60 @@ function organizador(data){
 
 function fillTable(data){
 
+    var htmlString =    '<tr><td>' + "Total de solicitudes" + '</td><td>' + data.totalDeRegistros + '</td></tr>'+
+                        '<tr><td>' + "Total de especialidades" + '</td><td>' + data.totalDeEspecialidades + '</td></tr>'+
+                        '<tr><td>' + "Total de solicitudes para HGR" + '</td><td>' + data.totalDeAtencionesHGR + '</td></tr>'+
+                        '<tr><td>' + "Total de solicitudes para HMQ" + '</td><td>' + data.totalDeAtencionesHMQ + '</td></tr>'
+
+    $("#totalesBody").append(htmlString);
+}
+
+function fillGraph(data){
+
+    var admisionChart = Highcharts.chart('admisionContainer', doGraph(totales.admision,"Admision","Add"));
+    //console.dir(totales.especialidades)
+}
+
+function doGraph(data, title, subtitle){
+
+    var dataGraph = [];
+
+    for (var index in data){
+
+        dataGraph.push({name: index, y:data[index]});
+    }
+
+    return {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
+        title: {
+            text: title
+        },
+        subtitle: {
+            text: subtitle
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
+        },
+        series: [{
+
+            data: dataGraph
+        }]
+    };
 
 }
 
@@ -82,6 +140,8 @@ function filltotales(data){
     var especialidadesHMQ = [];
     var admisionHGR = [];
     var admisionHMQ = [];
+    var atencionHGR = 0;
+    var atencionHMQ = 0;
 
     
     for (var index in data){
@@ -93,13 +153,14 @@ function filltotales(data){
         csnombre[data[index].csnombre] = 1 + (csnombre[data[index].csnombre] || 0);
         csDestino[data[index].csDestino] = 1 + (csDestino[data[index].csDestino] || 0);
 
-
+        //cuento los dos hospitales de primer nivel por separado
         if(data[index].csDestino == "HPGD Dr. Guillermo Rawson"){
 
+            atencionHGR++;
             especialidadesHGR[data[index].esp] = 1 + (especialidadesHGR[data[index].esp] || 0);
             admisionHGR[data[index].admision] = 1 + (admisionHGR[data[index].admision] || 0);
         }else{
-
+            atencionHMQ++;
             especialidadesHMQ[data[index].esp] = 1 + (especialidadesHMQ[data[index].esp] || 0);
             admisionHMQ[data[index].admision] = 1 + (admisionHMQ[data[index].admision] || 0);
         }
@@ -107,23 +168,26 @@ function filltotales(data){
 
     totales.totalDeRegistros = totalDeRegistros;
     totales.especialidades = especialidades;
+    totales.totalDeEspecialidades = countData(especialidades);
     totales.admision = admision;
     totales.csOrigen = csnombre;
     totales.csDestino = csDestino;
     totales.especialidadesHGR = especialidadesHGR;
+    totales.totalDeAtencionesHGR = atencionHMQ;
+    totales.totalDeAtencionesHMQ = atencionHGR;
     totales.especialidadesHMQ = especialidadesHMQ;
     totales.admisionHGR = admisionHGR;
     totales.admisionHMQ = admisionHMQ;
 
 }
 
-function sortData(data){
+// function sortData(data){
 
-    return data.sort(function(a, b) {
-            return a[1] - b[1];
-        });
+//     return data.sort(function(a, b) {
+//             return a[1] - b[1];
+//         });
 
-}
+// }
 
 
 function countData(obj) {
