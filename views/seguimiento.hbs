@@ -1,0 +1,191 @@
+<div class="row">
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+    </div>
+
+    <div class="form-group">
+
+
+        <h4>Elija rango de fechas:</h4>
+
+        <div id="datepicker-container">
+            <div class="input-daterange input-group" id="datepicker">
+                <span class="input-group-addon">Fecha desde:</span>
+                <input id="dateDesde" type="text" class="input-sm form-control" name="start" />
+                <span class="input-group-addon">Fecha hasta:</span>
+                <input id="dateHasta" type="text" class="input-sm form-control" name="end" /> 
+            </div>
+        </div>
+
+    </div> 
+
+</div>
+
+<div class="row">
+
+    <button class="btn btn-primary" id="mostrarSeguimiento">Mostrar seguimiento</button>
+
+</div>
+<div class="row datablock" hidden="hidden">
+
+    <h4 class="graphTitle">Totales generales</h4>
+
+    <div class="row tarjeta">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Dato</th>
+                    <th>Cantidad</th>
+                </tr>
+            </thead>
+            <tbody id="totalesBody"></tbody>
+        </table>
+    </div>
+
+</div>
+
+
+{{!-- Gráficos --}}
+<div class="row datablock" hidden="hidden">
+
+    <div class="row tarjeta">
+
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+            <div id="admisionContainer"></div>
+
+        </div>
+
+    </div>
+
+
+    <div class="row tarjeta">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div id="admisionHQContainer"></div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div id="admisionHRContainer"></div>
+        </div>
+    </div>
+
+    <div class="row tarjeta">
+
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+            <div id="especialidadesContainer"></div>
+
+        </div>
+
+    </div>
+
+    <div class="row tarjeta">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div id="especialidadesHQContainer"></div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div id="especialidadesHRContainer"></div>
+        </div>
+    </div>
+</div>
+
+{{!-- <h4 class="graphTitle">Totales</h4>
+
+<div class="row tarjeta">
+    <table id="totalesTable" class="table table-striped">
+        <tbody>
+            <tr>
+                <td>Cantidad de pacientes encontrados</td>
+                <td id="cantPacientes"></td>
+            </tr>
+                    <tr>
+                <td>Cantidad de especialidades solicitadas</td>
+                <td id="cantEsp"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<h4 class="graphTitle">Cantidades por centro de salud de procedencia</h4>
+
+<div class="row tarjeta">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Centro de salud</th>
+                <th>Cantidad</th>
+            </tr>
+        </thead>
+        <tbody id="totalesPorCsBody"></tbody>
+    </table>
+</div>
+
+<div class="row">
+
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div class="row tarjeta">
+
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                <div id="espContainer"></div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+
+        <h4 class="graphTitle">Cantidades por especialidad</h4>
+
+        <div class="row tarjeta">
+            <table id="totalesEsp" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Especialidad</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody id="especialidadesBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+
+
+<h4 class="graphTitle">Totales por tipo de admisión</h4>
+
+<div class="row tarjeta">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Tipo de admisión</th>
+                <th>Cantidad</th>
+            </tr>
+        </thead>
+        <tbody id="cantAdmisionBody"></tbody>
+    </table>
+</div>
+
+<h4 class="graphTitle">Pacientes que recibieron atención</h4>
+
+<div class="row tarjeta">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Paciente programado</th>
+            <th>DNI</th>
+            <th>Fecha de atención</th>
+            <th>Centro de Salud</th>
+            <th>Especialidad</th>
+            <th>Admision</th>
+        </tr>
+        </thead>
+        <tbody id="seguimientoBody"></tbody>
+    </table>
+</div> --}}
+
+<script type="text/javascript" src="async.min.js"></script>
+<script type="text/javascript" src="javascripts/seguimiento.js"></script>
