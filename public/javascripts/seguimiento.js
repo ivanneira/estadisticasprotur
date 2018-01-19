@@ -81,11 +81,21 @@ function fillTable(data){
 
 function fillGraph(data){
 
-    var admisionChart = Highcharts.chart('admisionContainer', doGraph(totales.admision,"Admision","Add"));
+    //Admisiones
+    var admisionChart = Highcharts.chart('admisionContainer', templateGraph(totales.admision,"Admisión","Totales de admisión"));
+    var admisionHMQChart = Highcharts.chart('admisionHQContainer', templateGraph(totales.admisionHMQ,"Admisión","Hospital Marcial Quiroga"));
+    var admisionHGRChart = Highcharts.chart('admisionHRContainer', templateGraph(totales.admisionHGR,"Admisión","Hospital Guillermo Rawson"));
+
+    //especialidades
+    var especialidadesChart = Highcharts.chart('especialidadesContainer', templateGraph(totales.especialidades,"Especialidades","Totales de especialidades"));
+    var especialidadesHMQChart = Highcharts.chart('especialidadesHQContainer', templateGraph(totales.especialidadesHMQ,"Especialidades","Hospital Marcial Quiroga"));
+    var especialidadesHGRChart = Highcharts.chart('especialidadesHRContainer', templateGraph(totales.especialidadesHGR,"Especialidades","Hospital Guillermo Rawson"));
+
+
     //console.dir(totales.especialidades)
 }
 
-function doGraph(data, title, subtitle){
+function templateGraph(data, title, subtitle){
 
     var dataGraph = [];
 
@@ -113,7 +123,7 @@ function doGraph(data, title, subtitle){
                 cursor: 'pointer',
                 dataLabels: {
                     enabled: true,
-                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    format: '<b>{point.name}</b>: {point.y} ',
                     style: {
                         color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
                     }
