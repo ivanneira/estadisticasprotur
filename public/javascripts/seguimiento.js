@@ -2,7 +2,9 @@ var dataset;
 
 var totales = {};
 
-$(function(){
+
+
+$(function(){ 
 
 
 
@@ -62,7 +64,7 @@ function organizador(data){
         ],
         function(err,results){
 
-            console.dir(totales);
+            //console.dir(totales);
             $(".datablock").show();
             $("#waiting").modal('hide');
 
@@ -97,6 +99,7 @@ function fillGraph(data){
 
 function templateGraph(data, title, subtitle){
 
+
     var dataGraph = [];
 
     for (var index in data){
@@ -104,6 +107,7 @@ function templateGraph(data, title, subtitle){
         dataGraph.push({name: index, y:data[index]});
     }
 
+   
     return {
         chart: {
             plotBackgroundColor: null,
@@ -123,10 +127,11 @@ function templateGraph(data, title, subtitle){
                 cursor: 'pointer',
                 dataLabels: {
                     enabled: true,
-                    format: '<b>{point.name}</b>: {point.y} ',
+                    format: '<b>{point.name}</b>: {point.y}',
                     style: {
                         color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                    }
+                    },
+                    connectorColor: 'silver'
                 }
             }
         },
@@ -177,32 +182,29 @@ function filltotales(data){
     }
 
     totales.totalDeRegistros = totalDeRegistros;
-    totales.especialidades = especialidades;
+    totales.especialidades = especialidades.sort(sortCondition);
     totales.totalDeEspecialidades = countData(especialidades);
-    totales.admision = admision;
+    totales.admision = admision.sort(sortCondition);
     totales.csOrigen = csnombre;
     totales.csDestino = csDestino;
     totales.especialidadesHGR = especialidadesHGR;
     totales.totalDeAtencionesHGR = atencionHMQ;
     totales.totalDeAtencionesHMQ = atencionHGR;
-    totales.especialidadesHMQ = especialidadesHMQ;
-    totales.admisionHGR = admisionHGR;
-    totales.admisionHMQ = admisionHMQ;
+    totales.especialidadesHMQ = especialidadesHMQ.sort(sortCondition);
+    totales.admisionHGR = admisionHGR.sort(sortCondition); 
+    totales.admisionHMQ = admisionHMQ.sort(sortCondition);
 
+    return;
 }
 
-// function sortData(data){
+function sortCondition(a,b) {
 
-//     return data.sort(function(a, b) {
-//             return a[1] - b[1];
-//         });
-
-// }
-
+    return b[1] - a[1];
+}
 
 function countData(obj) {
     var count=0;
-    for(var prop in obj) {
+    for(var prop in obj) { 
         if (obj.hasOwnProperty(prop)) {
             ++count;
         }

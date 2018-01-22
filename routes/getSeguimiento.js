@@ -22,49 +22,7 @@ router.get('/:fechaDesde/:fechaHasta', function(req, res, next) {
 
     sql.connect(config, err => {
 
-        // var queryString =   "SELECT      \n" +
-        //                     "        pr.PN       AS 'nombre',\n" +
-        //                     "        pr.DP       AS 'dni', \n" +
-        //                     "        pr.FP       AS 'atencion',\n" +
-        //                     "        pr.CS       AS 'cs',\n" +
-        //                     "        es.Nombre   AS 'esp'\n" +
-        //                     "FROM    [MSP-Ares].dbo.proturregistros pr \n" +
-        //                     "        JOIN regprof.dbo.paciente pa \n" +
-        //                     "            ON pa.numerodocumento = pr.dp \n" +
-        //                     "        JOIN regprof.dbo.turno tu \n" +
-        //                     "            ON tu.pacienteid = pa.pacienteid \n" +
-        //                     "        JOIN regprof.dbo.turnoencabezado te \n" +
-        //                     "            ON te.turnoid = tu.turnoid \n" +
-        //                     "        JOIN [MSP-Ares].dbo.Especialidad es\n" +
-        //                     "            ON pr.ET = es.ID\n" +
-        //                     "WHERE   CONVERT(VARCHAR(10), te.fechaadmision, 127) = pr.fp \n" +
-        //                     "        AND pr.DC BETWEEN '"+ fd +"' AND '"+ fh +"'";
 
-        // var queryString = "SELECT      \n" +
-        // "        pr.PN       AS 'nombre',\n" +
-        // "        pr.DP       AS 'dni', \n" +
-        // "        pr.FP       AS 'atencion',\n" +
-        // "        pr.CS       AS 'cs',\n" +
-        // "        es.Nombre   AS 'esp',\n" +
-        // "        ta.Descripcion AS 'admision',\n" +
-        // "        ta.TipoAdmisionId AS 'admisionid',\n" +
-        // "        tu.TipoTurnoID AS 'tipoturnoid',\n" +
-        // "        et.Descripcion AS 'tipoturno'\n" +
-        // "FROM    [MSP-Ares].dbo.proturregistros pr \n" +
-        // "        JOIN regprof.dbo.paciente pa \n" +
-        // "            ON pa.numerodocumento = pr.dp \n" +
-        // "        JOIN regprof.dbo.turno tu \n" +
-        // "            ON tu.pacienteid = pa.pacienteid \n" +
-        // "        JOIN regprof.dbo.turnoencabezado te \n" +
-        // "            ON te.turnoid = tu.turnoid \n" +
-        // "        JOIN [MSP-Ares].dbo.Especialidad es\n" +
-        // "            ON pr.ET = es.ID\n" +
-        // "        JOIN RegProf.dbo.TipoAdmision ta\n" +
-        // "            ON ta.TipoAdmisionId = te.TipoAdmisionID\n" +
-        // "        JOIN RegProf.dbo.EstadoTurno et \n" +
-        // "            ON et.EstadoTurnoID = tu.EstadoTurnoID\n" +
-        // "WHERE   CONVERT(VARCHAR(10), te.fechaadmision, 127) = pr.fp \n" +
-        // "        AND pr.DC BETWEEN '"+ fd +"' AND '"+ fh +"'";
 
         var queryString = "SELECT      \n" +
         "        pr.FP       AS 'atencion',\n" +
@@ -111,6 +69,33 @@ router.get('/:fechaDesde/:fechaHasta', function(req, res, next) {
         console.log(err);
         res.send('error');
 
+    });
+});
+
+router.get('/getProturSinTurno', function(req, res, next) {
+
+    sql.connect(config, err => {
+
+        var queryString = "SELECT * FROM  [MSP-Ares].dbo.Especialidad";
+
+        new sql.Request().query(queryString, (err, result) => {
+
+            if(err){
+
+                console.dir(err);
+                res.send('error');
+
+            }else{
+
+                res.send(result);
+            }
+        });
+    });
+
+    sql.on('error', err => {
+
+        // ... error handler
+        console.log(err);
     });
 });
 
